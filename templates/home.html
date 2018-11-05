@@ -1,0 +1,12 @@
+{% extends 'layouts/main.html' %}
+
+{% block body %}
+  <div class="jumbotron">
+    <h1>Welcome to our book review website!</h1>
+    <p>Rate and post your review on your favorite books.</p>
+    <p>
+      <a class="btn btn-info" href="{{ url_for('registration') }}">Register</a>
+      <a class="btn btn-primary" href="{{ url_for('login') }}">Login</a>
+    </p>
+  <div>
+{% endblock %}
