@@ -1,0 +1,14 @@
+{% extends 'layouts/main.html' %}
+
+{% block header %}
+    Registration Success!
+{% endblock %}
+
+{% block body %}
+  <div class="col-md-6 offset-md-3">
+    <div class="jumbotron">
+      <p class="lead">You have successfully registered to our system.</p>
+      <p>Click <a href="{{ url_for('login') }}">here</a> to login</p>
+    <div>
+  </div>
+{% endblock %}
