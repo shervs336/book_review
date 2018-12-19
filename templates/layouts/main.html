@@ -35,7 +35,7 @@
     <div class="container">
       <div class="main">
         <div class="row">
-          <div class=" {% if request.path == '/register' or request.path == 'login' %} col-md-6 offset-md-3 {% endif %}">
+          <div class=" {% if request.path == '/register' or request.path == '/login' %} col-md-6 offset-md-3 {% endif %}">
             <h1 class="heading mt-4">{% block header %}{% endblock %}</h1>
           </div>
         </div>

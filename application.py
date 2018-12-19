@@ -82,5 +82,11 @@ def registration():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    # Assign an empty error list
+    errors = [];
+    form_data = {};
+
+    if request.method == 'GET':
+        return render_template("auth/login.html", title = 'Login - Book Review', errors = errors, form_data = form_data)
 
     return 'Login'
