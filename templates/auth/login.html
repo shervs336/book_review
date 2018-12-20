@@ -23,7 +23,7 @@
           <form action="{{ url_for('login') }}" method="post">
 
             <div class="form-group">
-              <input type="text" class="form-control" name="username" placeholder="Enter a username..." {% if form_data|length > 0 and form_data.get("username") %} value="{{ form_data.get("username") }}" {% endif %}>
+              <input type="text" class="form-control" name="username" placeholder="Enter a username...">
             </div>
 
             <div class="form-group">
@@ -31,6 +31,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="{{ url_for('registration') }}" class="btn btn-link">Don't have an account yet?</a>
 
           </form>
         </div>

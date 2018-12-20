@@ -1,10 +1,10 @@
 import os
 import requests
-import function
 import sys
 
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, redirect, url_for
 from flask_session import Session
+from function import active
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
@@ -23,6 +23,9 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
+# Add template global
+app.add_template_global(active, name = "active")
+
 @app.route("/index")
 @app.route("/")
 def index():
@@ -31,11 +34,17 @@ def index():
     print(res.json())
     return render_template("home.html", title = 'Home Page - Book Review')
 
+# Auth Routes
 @app.route("/register", methods=['POST', 'GET'])
 def registration():
+
+    # Redirect if logged in
+    if session["auth"] :
+        return redirect(url_for('index'));
+
     # Assign an empty error list
-    errors = [];
-    form_data = {};
+    errors = []
+    form_data = {}
 
     # Must load template if method is GET
     if request.method == 'GET':
@@ -82,14 +91,49 @@ def registration():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    print(session.get("auth"));
+
+    # Redirect if logged in
+    if session["auth"] :
+        return redirect(url_for('index'));
+
     # Assign an empty error list
-    errors = [];
-    form_data = {};
+    errors = []
 
     if request.method == 'GET':
-        return render_template("auth/login.html", title = 'Login - Book Review', errors = errors, form_data = form_data)
+        return render_template("auth/login.html", title = 'Login - Book Review', errors = errors)
 
-    return 'Login'
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    # Validate Form
+    if not username :
+        errors.append('Username is required')
+
+    if not password :
+        errors.append('Password is required')
+
+    if len(errors) > 0:
+        return render_template("auth/login.html", title = 'Registration - Book Review', errors = errors, form_data = form_data)
+
+    # Check for successful login
+    session["auth"] = db.execute("SELECT * FROM users WHERE username = :username AND password = :password", {"username": username, "password": password}).fetchone()
+
+    if session["auth"] :
+        return redirect(url_for("index"))
+    else :
+        errors.append('Username and Password did not matched in our records')
+        return render_template("auth/login.html", title = 'Login - Book Review', errors = errors)
+
+@app.route('/logout', methods = ['GET', 'POST'])
+def logout():
+
+    if request.method == 'GET':
+        return redirect(url_for("err_404"))
+
+    session['auth'] = None
+    return redirect(url_for("index"))
+
 # Error Routes
 @app.route('/404')
 def err_404():

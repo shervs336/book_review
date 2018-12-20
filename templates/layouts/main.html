@@ -20,9 +20,20 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{{ url_for('index') }}">Home <span class="sr-only">(current)</span></a>
+            <li class="nav-item {{ active('index') }}">
+              <a class="nav-link" href="{{ url_for('index') }}">Home {{ active('index', True)|safe }}</a>
             </li>
+            {% if session["auth"] %}
+            <li class="nav-item">
+              <form class="form-inline my-2 my-lg-0" method="post" action="{{ url_for('logout') }}">
+                <button class="btn btn-outline-danger" type="submit">Logout</button>
+              </form>
+            </li>
+            {% else %}
+            <li class="nav-item {{ active('login') }}">
+              <a class="nav-link" href="{{ url_for('login') }}">Login {{ active('login', True)|safe }}</a>
+            </li>
+            {% endif %}
           </ul>
           <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

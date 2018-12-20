@@ -1,5 +1,6 @@
 import os
 
+from flask import request
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
@@ -13,3 +14,21 @@ if not os.getenv("DATABASE_URL"):
 
 def getLoggedUser(user):
     return user
+
+def active(param, sr_only = False):
+    rule = request.url_rule
+
+    print(rule.rule);
+
+    # Check if rule is active
+    if param in rule.rule :
+
+        if sr_only :
+
+            return "<span class='sr-only'>(current)</span>"
+
+        else :
+
+            return "active"
+
+    return ""
