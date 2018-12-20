@@ -90,3 +90,7 @@ def login():
         return render_template("auth/login.html", title = 'Login - Book Review', errors = errors, form_data = form_data)
 
     return 'Login'
+# Error Routes
+@app.route('/404')
+def err_404():
+    return render_template('error/404.html', title = '404 Page Not Found - Book Review')
